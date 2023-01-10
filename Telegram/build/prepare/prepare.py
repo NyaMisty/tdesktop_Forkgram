@@ -341,6 +341,20 @@ def runStages():
     count = len(stages)
     index = 0
     for stage in stages:
+        def rmtemps(directory):
+            from pathlib import Path
+            directory = Path(directory)
+            for item in directory.iterdir():
+                if item.is_dir():
+                    rmtemps(item)
+                else:
+                    if item.suffix in ('.pdb', '.obj'):
+                        item.unlink()
+            # directory.rmdir()
+        
+        rmtemps(libsDir)
+        rmtemps(thirdPartyDir)
+
         if len(onlyStages) > 0 and not stage['name'] in onlyStages:
             continue
         index = index + 1
